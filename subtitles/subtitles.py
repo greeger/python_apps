@@ -36,11 +36,12 @@ class Time:
         self.add_m(cur_m)
         return self.get_line()
 
-file_name = 'C:/Users/79371/Downloads/suits-s04/Suits.S04E05.HDTV.x264-KILLERS.srt'
+file_name = 'C:/Users/79371/Downloads/suits-s04/Suits.S04E01.HDTV.x264-LOL.srt'
 
 with open(file_name) as f_input:
     list_data = f_input.readlines()
     f_input.close
+list_data[0] = '1\n'
 
 words = []
 
