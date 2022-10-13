@@ -36,24 +36,44 @@ class Time:
         self.add_m(cur_m)
         return self.get_line()
 
-file_name = 'C:/Users/79371/Downloads/suits-s04/Suits.S04E01.HDTV.x264-LOL.srt'
+    def more_than(self, new_time):
+        if self.h > new_time.h:
+            return True
+        if self.h < new_time.h:
+            return False
+        if self.m > new_time.m:
+            return True
+        if self.m < new_time.m:
+            return False
+        if self.s < new_time.s:
+            return False
+        return True
+
+file_name = 'C:/Users/79371/Downloads/suits-s04/Suits.S04E06.REPACK.HDTV.x264-KILLERS.srt'
+
+# when shift starts and seconds of it
+times = [(Time('00:00:00'), 1), (Time('00:20:30'), 2), (Time('00:26:59'), 2.5), (Time('00:32:46'), 3.2)]
 
 with open(file_name) as f_input:
     list_data = f_input.readlines()
     f_input.close
 list_data[0] = '1\n'
 
-words = []
+rez = []
 
 for line in list_data:
     line_words=line.split(' --> ')
     if(len(line_words) < 2):
-        words.append(line)
+        rez.append(line)
     else:
         t0 = Time(line_words[0])
         t1 = Time(line_words[1])
-        words.append(t0.add_s(1) + ' --> ' + t1.add_s(1) + "\n")
+
+        for i in range(len(times)-1, -1, -1):
+            if t0.more_than(times[i][0]):
+                rez.append(t0.add_s(times[i][1]) + ' --> ' + t1.add_s(times[i][1]) + "\n")
+                break
 
 with open(file_name[:len(file_name)-4]+'_new.srt', 'w', encoding='utf-8') as f_output:
-    f_output.writelines(words)
+    f_output.writelines(rez)
     f_output.close
