@@ -27,6 +27,7 @@ def getInPixel(x, y):
 imOut = Image.new(mode, (w, h), bgColor)
 draw = ImageDraw.Draw(imOut)
 
+#'''
 for k in range(5):
     size = sizes[seq[k]]
     center = (np.sin(np.pi*2*k/5)*mainRadius + w/2, -np.cos(np.pi*2*k/5)*mainRadius + h/2)
@@ -41,6 +42,25 @@ for k in range(5):
                     pixel = getInPixel(i/(size*circleRadius), j/(size*circleRadius))
                     if pixel[3] > 100:
                         draw.point((x, y), pixel)
-            
+'''
+
+for i in range(w):
+    for j in range(h):
+        r2 = (i - w/2)**2 + (j - h/2)**2
+        if r2 >= (mainRadius - circleRadius)**2 and r2 <= (mainRadius + circleRadius)**2:
+            draw.point((i, j), circlesColor)
+for k in range(5):
+    size = sizes[seq[k]]
+    center = (np.sin(np.pi*2*k/5)*mainRadius + w/2, -np.cos(np.pi*2*k/5)*mainRadius + h/2)
+    for i in range(-circleRadius + 1, circleRadius):
+        for j in range(-circleRadius + 1, circleRadius):
+            x = (int)(i + center[0])
+            y = (int)(j + center[1])
+            if x >= 0 and y >= 0 and x < w and y < h:
+                if i >= -circleRadius*size and i <= circleRadius*size and j >= -circleRadius*size and j <= circleRadius*size:
+                    pixel = getInPixel(i/(size*circleRadius), j/(size*circleRadius))
+                    if pixel[3] > 100:
+                        draw.point((x, y), pixel)
+'''
 
 imOut.save(outputFileName)
