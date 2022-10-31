@@ -37,9 +37,10 @@ for k in range(5):
             if x >= 0 and y >= 0 and x < w and y < h:
                 if i**2 + j**2 <= circleRadius**2:
                     draw.point((x, y), circlesColor)
-                pixel = getInPixel(i/(size*circleRadius), j/(size*circleRadius))
-                if pixel[3] > 100:
-                    draw.point((x, y), pixel)
+                if i >= -circleRadius*size and i <= circleRadius*size and j >= -circleRadius*size and j <= circleRadius*size:
+                    pixel = getInPixel(i/(size*circleRadius), j/(size*circleRadius))
+                    if pixel[3] > 100:
+                        draw.point((x, y), pixel)
             
 
 imOut.save(outputFileName)
