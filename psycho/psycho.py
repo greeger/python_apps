@@ -1,21 +1,24 @@
 import numpy as np
 from PIL import Image, ImageDraw
 
-inputFileName = 'C:/Users/79371/Desktop/python apps/psycho/0.png'
-outputFileName = 'C:/Users/79371/Desktop/python apps/psycho/rez.png'
-w = 1000
-h = 1000
-mode = 'RGBA'
-bgColor = (150, 150, 150, 255)
-mainRadius = (int)(w/3)
-circlesColor = (70, 70, 70, 255)
-circleRadius = (int)(w/6)
-seq = [2, 1, 4, 0, 3]
-sizes = [1, 0.85, 0.7, 0.55, 0.4]
+inputFileName = 'C:/Users/79371/Desktop/python apps/psycho/проба.png'
+outputFileName = 'C:/Users/79371/Desktop/python apps/psycho/rez.jpg'
+w = 512*4
+h = 512*4
+mode = 'L'
+bgColor = 255
+mainRadius = (int)(w/2.8)
+circlesColor = 210
+circleRadius = (int)(w/8.4)
+seq = [2, 0, 4, 1, 3]
+sizes = [0.7, 1, 1, 1, 1]
+sizeShift = 1.3
+for i in range(4):
+    sizes[i+1] = sizes[i]/sizeShift
 
 imIn = Image.open(inputFileName)
 bbox = imIn.getbbox()
-inCenter = ((bbox[2] - bbox[0])/2, (bbox[3] - bbox[1])/2)
+inCenter = ((bbox[2] + bbox[0])/2, (bbox[3] + bbox[1])/2)
 inSize = max(bbox[2] - bbox[0], bbox[3] - bbox[1])/2
 def getInPixel(x, y):
     intX = (int)(inCenter[0] + inSize*x)
@@ -41,9 +44,8 @@ for k in range(5):
                 if i >= -circleRadius*size and i <= circleRadius*size and j >= -circleRadius*size and j <= circleRadius*size:
                     pixel = getInPixel(i/(size*circleRadius), j/(size*circleRadius))
                     if pixel[3] > 100:
-                        draw.point((x, y), pixel)
+                        draw.point((x, y), (int)((pixel[0] + pixel[1] + pixel[2])/3))
 '''
-
 for i in range(w):
     for j in range(h):
         r2 = (i - w/2)**2 + (j - h/2)**2
@@ -61,6 +63,7 @@ for k in range(5):
                     pixel = getInPixel(i/(size*circleRadius), j/(size*circleRadius))
                     if pixel[3] > 100:
                         draw.point((x, y), pixel)
-'''
+#'''
 
+imOut = imOut.resize(((int)(w/4), (int)(h/4)), Image.Resampling.LANCZOS)
 imOut.save(outputFileName)
