@@ -1,8 +1,7 @@
 import numpy as np
 from PIL import Image, ImageDraw
 
-inputName = 'st1'
-inputDirName = 'C:/Users/79371/Downloads/Telegram Desktop/'
+inputDirName = 'C:/Users/79371/Desktop/rez/stN/'
 outputDirName = 'C:/Users/79371/Desktop/rez/'
 w = 512*4
 h = 512*4
@@ -25,35 +24,47 @@ sizeShift = 1.3
 for i in range(4):
     sizes[i+1] = sizes[i]/sizeShift
 
-imIn = Image.open(inputDirName + inputName + '.png')
-bbox = imIn.getbbox()
-inCenter = ((bbox[2] + bbox[0])/2, (bbox[3] + bbox[1])/2)
-inSize = max(bbox[2] - bbox[0], bbox[3] - bbox[1])/2
-def getInPixel(x, y):
-    intX = (int)(inCenter[0] + inSize*x)
-    intY = (int)(inCenter[1] + inSize*y)
-    if intX >= bbox[0] and intY >= bbox[1] and intX < bbox[2] and intY < bbox[3]:
-        return imIn.getpixel((intX, intY))
-    else: return (0, 0, 0, 0)
+for st in range(6, 7):
+    inputName = 'st' + (str)(st)
+    print(inputName)
+    imIn = Image.open(inputDirName + inputName + '.png')
+    bbox = imIn.getbbox()
+    inCenter = ((bbox[2] + bbox[0])/2, (bbox[3] + bbox[1])/2)
+    if st == 6:
+        inCenter = (inCenter[0], bbox[1] + (bbox[3] - bbox[1])/(1 + np.cos(np.pi/5)))
+    inSize = max(bbox[2] - bbox[0], bbox[3] - bbox[1])/2
+    r = 0
+    for i in range(bbox[0], bbox[2]):
+        for j in range(bbox[1], bbox[3]):
+            if imIn.getpixel((i, j))[3] > 100:
+                currR = (i - inCenter[0])**2 + (j - inCenter[1])**2
+                if r**2 < currR:
+                    r = np.sqrt(currR)
+    def getInPixel(x, y):
+        intX = (int)(inCenter[0] + r*x)
+        intY = (int)(inCenter[1] + r*y)
+        if intX >= bbox[0] and intY >= bbox[1] and intX < bbox[2] and intY < bbox[3]:
+            return imIn.getpixel((intX, intY))
+        else: return (0, 0, 0, 0)
 
-for l in range(8):
-    imOut = Image.new(mode, (w, h), bgColor)
-    draw = ImageDraw.Draw(imOut)
-    for k in range(5):
-        print(l, ' ', k)
-        size = sizes[seq[l][k]]
-        center = (np.sin(np.pi*2*k/5)*mainRadius + w/2, -np.cos(np.pi*2*k/5)*mainRadius + h/2)
-        for i in range(-circleRadius + 1, circleRadius):
-            for j in range(-circleRadius + 1, circleRadius):
-                x = (int)(i + center[0])
-                y = (int)(j + center[1])
-                if x >= 0 and y >= 0 and x < w and y < h:
-                    if i**2 + j**2 <= circleRadius**2:
-                        draw.point((x, y), circlesColor)
-                    if i >= -circleRadius*size and i <= circleRadius*size and j >= -circleRadius*size and j <= circleRadius*size:
-                        pixel = getInPixel(i/(size*circleRadius), j/(size*circleRadius))
-                        if pixel[3] > 100:
-                            draw.point((x, y), (int)((pixel[0] + pixel[1] + pixel[2])/3))
+    for l in range(8):
+        imOut = Image.new(mode, (w, h), bgColor)
+        draw = ImageDraw.Draw(imOut)
+        for k in range(5):
+            print(l, ' ', k)
+            size = sizes[seq[l][k]]
+            center = (np.sin(np.pi*2*k/5)*mainRadius + w/2, -np.cos(np.pi*2*k/5)*mainRadius + h/2)
+            for i in range(-circleRadius + 1, circleRadius):
+                for j in range(-circleRadius + 1, circleRadius):
+                    x = (int)(i + center[0])
+                    y = (int)(j + center[1])
+                    if x >= 0 and y >= 0 and x < w and y < h:
+                        if i**2 + j**2 <= circleRadius**2:
+                            draw.point((x, y), circlesColor)
+                        if i >= -circleRadius*size and i <= circleRadius*size and j >= -circleRadius*size and j <= circleRadius*size:
+                            pixel = getInPixel(i/(size*circleRadius), j/(size*circleRadius))
+                            if pixel[3] > 100:
+                                draw.point((x, y), (int)((pixel[0] + pixel[1] + pixel[2])/3))
 
-    imOut = imOut.resize(((int)(w/4), (int)(h/4)), Image.Resampling.LANCZOS)
-    imOut.save(outputDirName + inputName + '_' + outputNames[l] + '.jpg')
+        imOut = imOut.resize(((int)(w/4), (int)(h/4)), Image.Resampling.LANCZOS)
+        imOut.save(outputDirName + inputName + '_' + outputNames[l] + '.jpg')
