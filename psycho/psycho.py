@@ -24,7 +24,7 @@ sizeShift = 1.3
 for i in range(4):
     sizes[i+1] = sizes[i]/sizeShift
 
-for st in range(6, 7):
+for st in range(11, 21):
     inputName = 'st' + (str)(st)
     print(inputName)
     imIn = Image.open(inputDirName + inputName + '.png')
@@ -64,7 +64,8 @@ for st in range(6, 7):
                         if i >= -circleRadius*size and i <= circleRadius*size and j >= -circleRadius*size and j <= circleRadius*size:
                             pixel = getInPixel(i/(size*circleRadius), j/(size*circleRadius))
                             if pixel[3] > 100:
-                                draw.point((x, y), (int)((pixel[0] + pixel[1] + pixel[2])/3))
+                                #draw.point((x, y), (int)((pixel[0] + pixel[1] + pixel[2])/3))
+                                draw.point((x, y), 0)
 
         imOut = imOut.resize(((int)(w/4), (int)(h/4)), Image.Resampling.LANCZOS)
         imOut.save(outputDirName + inputName + '_' + outputNames[l] + '.jpg')

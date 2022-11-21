@@ -49,10 +49,13 @@ class Time:
             return False
         return True
 
-file_name = 'C:/Users/79371/Downloads/suits-s04/Suits.S04E06.REPACK.HDTV.x264-KILLERS.srt'
+file_name = 'C:/Users/79371/Downloads/suits-s08/Suits.S08E16.720p.BluRay.X264-REWARD.srt'
 
-# when shift starts and seconds of it
-times = [(Time('00:00:00'), 1), (Time('00:20:30'), 2), (Time('00:26:59'), 2.5), (Time('00:32:46'), 3.2)]
+# when shift starts (in video) and seconds of it
+times = [(Time('00:00:00'), 5), (Time('00:04:20'), 4), (Time('00:13:03'), 3), (Time('00:18:43'), 2.5), (Time('00:26:45'), 0.5), (Time('00:33:09'), -1), ]
+
+for i in range(1, len(times)):
+    times[i][0].add_s(-times[i-1][1])
 
 with open(file_name) as f_input:
     list_data = f_input.readlines()
