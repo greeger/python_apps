@@ -1,10 +1,10 @@
 import codecs
 from email.policy import default
 
-with open('C://Users/79371/Desktop/мусор/words5ru.txt', encoding='utf-8') as f_input:
+with open('C:/Users/79371/Desktop/python apps/wordl/words5ru.txt', encoding='utf-8') as f_input:
     wordsRu = f_input.read().split()
     f_input.close
-with open('C://Users/79371/Desktop/мусор/words5en.txt') as f_input:
+with open('C:/Users/79371/Desktop/python apps/wordl/words5en.txt') as f_input:
     wordsEn = f_input.read().split()
     f_input.close
 
@@ -85,7 +85,7 @@ for i in range(6):
     for j in range(5):
         rez[j]=int(rez[j])
     words2=filterWords(words2,(word,rez))
-    word=getBestWord(words2 if ruHardMode else wordsRU, words2,words2)
+    word=getBestWord(words2 if ruHardMode else wordsRu, words2)
     if len(words2)==1:
         print(word)
         break

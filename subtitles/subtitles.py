@@ -49,10 +49,10 @@ class Time:
             return False
         return True
 
-file_name = 'C:/Users/79371/Downloads/suits-s08/Suits.S08E16.720p.BluRay.X264-REWARD.srt'
+file_name = 'C:/Users/79371/Desktop/фильми/The Shawshank Redemption (1994) [1080p]/The.Shawshank.Redemption.1994.1080p.x264.YIFY.srt'
 
 # when shift starts (in video) and seconds of it
-times = [(Time('00:00:00'), 5), (Time('00:04:20'), 4), (Time('00:13:03'), 3), (Time('00:18:43'), 2.5), (Time('00:26:45'), 0.5), (Time('00:33:09'), -1), ]
+times = [(Time('00:00:00'), 2), ]
 
 for i in range(1, len(times)):
     times[i][0].add_s(-times[i-1][1])
